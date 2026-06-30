@@ -1,3 +1,13 @@
+---
+title: Attendance API Utopia
+emoji: 📊
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Utopia Attendance API Server & WebUI
 
 A high-performance FastAPI server and gorgeous glassmorphic WebUI for fetching and parsing student attendance details from the `info.aec.edu.in` college portal. Designed for local execution and seamless deployment to **Hugging Face Spaces** (via Docker).
