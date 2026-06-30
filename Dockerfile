@@ -4,7 +4,8 @@ FROM python:3.11-slim
 ENV PYTHONUNBUFFERED=1 \
     DEBIAN_FRONTEND=noninteractive \
     PORT=7860 \
-    PLAYWRIGHT_BROWSERS_PATH=/app/playwright-browsers
+    HOME=/home/user \
+    PLAYWRIGHT_BROWSERS_PATH=/home/user/.cache/ms-playwright
 
 WORKDIR /app
 
@@ -31,15 +32,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Set up a new user named "user" with UID 1000
+RUN useradd -m -u 1000 user
+
 # Copy requirements and install python packages
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Create cache directory and set permissions
+RUN mkdir -p /home/user/.cache && chown -R user:user /home/user
+
+# Switch to the non-root user
+USER user
+
 # Install Patchright Chromium
 RUN python -m patchright install chromium
 
-# Copy app code
-COPY . .
+# Copy app code and set ownership
+COPY --chown=user:user . .
 
 # Expose the default Hugging Face Spaces port
 EXPOSE 7860

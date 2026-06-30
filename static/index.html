@@ -1141,6 +1141,11 @@
             errorPanel.classList.remove('visible');
             loadingOverlay.classList.add('active');
             
+            // Automatically hide loading overlay after 5 seconds to keep the UI interactive
+            setTimeout(() => {
+                loadingOverlay.classList.remove('active');
+            }, 5000);
+            
             const college = document.getElementById('college').value;
             const rollNumber = document.getElementById('rollNumber').value.trim();
             const password = document.getElementById('password').value;
