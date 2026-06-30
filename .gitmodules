@@ -1,0 +1,3 @@
+[submodule "Turnstile-Solver"]
+	path = Turnstile-Solver
+	url = https://github.com/Theyka/Turnstile-Solver.git
