@@ -13,6 +13,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     xvfb \
+    xauth \
     libnss3 \
     libnspr4 \
     libdbus-1-3 \
