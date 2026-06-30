@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utopia Attendance Portal</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --panel-bg: rgba(17, 25, 40, 0.75);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.3);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            
+            --success: #10b981;
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --warning: #f59e0b;
+            --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --danger: #ef4444;
+            --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
+            padding: 2rem 1rem;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Container */
+        .app-container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            z-index: 10;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 1rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo-area {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px var(--primary-glow));
+        }
+
+        header h1 {
+            font-size: 2.25rem;
+            background: linear-gradient(135deg, #fff 40%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Glass Panel */
+        .glass-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: var(--transition);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Navigation / Tabs */
+        .tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            padding: 4px;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.75rem 1rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-gradient);
+            color: #fff;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        /* Form Controls */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select,
+        textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1rem 0.85rem 2.5rem;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        input[type="text"]:focus + i,
+        input[type="password"]:focus + i {
+            color: var(--primary);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+        }
+
+        .select-wrapper::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        textarea {
+            padding-left: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Toggle Button / Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 24px;
+            border: 1px solid var(--panel-border);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: var(--primary-gradient);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .toggle-label {
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        /* Date range inputs */
+        .date-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .date-inputs.visible {
+            max-height: 150px;
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1rem;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input[type="date"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        /* Action Buttons */
+        .btn {
+            background: var(--primary-gradient);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 1rem 2rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px var(--primary-glow);
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.6;
+        }
+
+        /* Loader Overlay */
+        .loader-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(11, 15, 25, 0.9);
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .loader-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loader {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .loader-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+        }
+
+        .loader-ring:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            margin: 10px;
+            border-top-color: #a855f7;
+            animation: spin-reverse 1s linear infinite;
+        }
+
+        .loader-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #fff, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .results-section.visible {
+            display: flex;
+        }
+
+        /* Profile Header Card */
+        .profile-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 600px) {
+            .profile-info {
+                flex-direction: column;
+            }
+        }
+
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .student-details h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            color: #fff;
+        }
+
+        .student-details p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .student-details p {
+                justify-content: center;
+            }
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--panel-border);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge.college {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+        }
+
+        .badge.method {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #34d399;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        /* Circular Attendance Progress */
+        .circle-progress-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0.5rem 0;
+        }
+
+        .circle-progress-svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 8;
+        }
+
+        .circle-val {
+            fill: none;
+            stroke: url(#pctGrad);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 339.292; /* 2 * PI * 54 */
+            stroke-dashoffset: 339.292;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 6px var(--primary-glow));
+        }
+
+        .percentage-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .stat-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(135deg, #fff, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* Subject Cards */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .subject-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .subject-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.08);
+            transform: scale(1.01);
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .subject-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #fff;
+            line-height: 1.4;
+        }
+
+        .subject-pct {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            width: 0;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-bar-fill.status-ok {
+            background: var(--success-gradient);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+
+        .progress-bar-fill.status-warning {
+            background: var(--warning-gradient);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+
+        .progress-bar-fill.status-danger {
+            background: var(--danger-gradient);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+        }
+
+        .subject-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .bunk-calculator {
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .bunk-calculator.safe {
+            color: #34d399;
+            background: rgba(52, 211, 153, 0.08);
+        }
+
+        .bunk-calculator.required {
+            color: #f87171;
+            background: rgba(248, 113, 113, 0.08);
+        }
+
+        .bunk-calculator.neutral {
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.08);
+        }
+
+        /* Developer Console / Details Expandable */
+        .collapsible-container {
+            margin-top: 1rem;
+        }
+
+        .collapsible-trigger {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            transition: var(--transition);
+        }
+
+        .collapsible-trigger:hover {
+            color: #fff;
+        }
+
+        .collapsible-trigger i {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-trigger.active i {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .collapsible-content.open {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .cookie-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #34d399;
+            margin-top: 0.5rem;
+            position: relative;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 0.75rem;
+            top: 0.75rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.4rem 0.6rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Error box */
+        .error-panel {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            color: #f87171;
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            animation: shake 0.5s ease;
+        }
+
+        .error-panel.visible {
+            display: flex;
+        }
+
+        /* Keyframes Animations */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes spin-reverse {
+            to { transform: rotate(-360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* Utility */
+        .text-center { text-align: center; }
+        .mt-2 { margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <!-- SVG gradients used for strokes -->
+    <svg style="width:0;height:0;position:absolute;">
+        <defs>
+            <linearGradient id="pctGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1" />
+                <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header>
+            <div class="logo-area">
+                <i class="fa-solid fa-clock-rotate-left logo-icon"></i>
+            </div>
+            <h1>UTOPIA ATTENDANCE</h1>
+            <p>Access attendance data instantly and compute your bunk buffer status.</p>
+        </header>
+
+        <!-- Main Panel (Input Form) -->
+        <div class="glass-panel" style="position: relative;">
+            
+            <!-- Loading overlay -->
+            <div class="loader-overlay" id="loadingOverlay">
+                <div class="loader">
+                    <div class="loader-ring"></div>
+                    <div class="loader-ring"></div>
+                </div>
+                <div class="loader-text" id="loaderText">Accessing Portal...</div>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="tabs">
+                <button type="button" class="tab-btn active" id="tabStandard" onclick="switchTab('standard')">
+                    <i class="fa-solid fa-user-lock"></i> Standard Login
+                </button>
+                <button type="button" class="tab-btn" id="tabCookie" onclick="switchTab('cookie')">
+                    <i class="fa-solid fa-cookie-bite"></i> Cookie Bypass
+                </button>
+            </div>
+
+            <form id="attendanceForm" onsubmit="handleSubmit(event)">
+                <!-- Target College -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="college">College Portal</label>
+                        <div class="input-wrapper select-wrapper">
+                            <i class="fa-solid fa-university"></i>
+                            <select id="college" name="college" required>
+                                <option value="aus">Aditya University (AUS)</option>
+                                <option value="acet">ACET (Aditya Engineering College)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rollNumber">Roll Number</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-id-badge"></i>
+                            <input type="text" id="rollNumber" placeholder="e.g. 21A91A1201" required>
+                        </div>
+                    </div>
+
+                    <!-- Password Group (shown in Standard login) -->
+                    <div class="form-group" id="pwdGroup">
+                        <label for="password">Portal Password</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-key"></i>
+                            <input type="password" id="password" placeholder="Enter portal password">
+                        </div>
+                    </div>
+
+                    <!-- Cookies Group (shown in Cookie bypass) -->
+                    <div class="form-group full-width" id="cookieGroup" style="display: none;">
+                        <label for="cookies">Session Cookies (JSON Format)</label>
+                        <div class="input-wrapper" style="display: block;">
+                            <textarea id="cookies" placeholder='e.g. { "ASP.NET_SessionId": "xxxx", "frmAuth": "yyyy" }'></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Options Toggle -->
+                    <div class="form-group full-width">
+                        <div class="toggle-container" onclick="toggleDateRange()">
+                            <label class="switch">
+                                <input type="checkbox" id="customDateToggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="toggle-label">Specify Date Range (Only supported on ACET)</span>
+                        </div>
+                    </div>
+
+                    <!-- Date range pickers -->
+                    <div class="form-group full-width">
+                        <div class="date-inputs" id="dateInputsContainer">
+                            <div class="form-group">
+                                <label for="fromDate">From Date</label>
+                                <input type="date" id="fromDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="toDate">To Date</label>
+                                <input type="date" id="toDate">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">
+                    <i class="fa-solid fa-paper-plane"></i> Fetch Attendance
+                </button>
+            </form>
+
+            <!-- Error panel -->
+            <div class="error-panel" id="errorPanel">
+                <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.25rem;"></i>
+                <span id="errorMsg">Something went wrong.</span>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="glass-panel results-section" id="resultsPanel">
+            <!-- Profile Header -->
+            <div class="profile-card">
+                <div class="profile-info">
+                    <div class="avatar" id="avatarLetter">S</div>
+                    <div class="student-details">
+                        <h2 id="studentName">Student Name</h2>
+                        <p>
+                            <span class="badge college" id="collegeBadge">AUS</span>
+                            <span class="badge method" id="methodBadge">Browser</span>
+                            <span id="displayRoll">21A91A1201</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="text-center" style="display: flex; flex-direction: column; align-items: center;">
+                    <div class="circle-progress-wrapper">
+                        <svg class="circle-progress-svg" viewBox="0 0 120 120">
+                            <circle class="circle-bg" cx="60" cy="60" r="54"></circle>
+                            <circle class="circle-val" id="circleProgress" cx="60" cy="60" r="54"></circle>
+                        </svg>
+                        <div class="percentage-text" id="overallPctText">0%</div>
+                    </div>
+                    <span class="stat-label">Overall Attendance</span>
+                </div>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid var(--panel-border); margin: 0.5rem 0;">
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card" style="background: rgba(255,255,255,0.01); border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.03);">
+                    <div class="stat-val" id="statsClasses">0 / 0</div>
+                    <div class="stat-label">Classes Attended / Held</div>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.01); border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.03); grid-column: span 2;">
+                    <div class="stat-val" id="bunkSummary" style="font-size: 1.5rem; line-height: 1.4; padding: 0.5rem;">Calculating...</div>
+                    <div class="stat-label">Consolidated Bunk Health</div>
+                </div>
+            </div>
+
+            <h3 style="font-size: 1.25rem; font-weight: 600; color: #fff; margin-top: 0.5rem;">Subject-wise Attendance</h3>
+            
+            <!-- Subjects List -->
+            <div class="subject-grid" id="subjectGrid">
+                <!-- Injected programmatically -->
+            </div>
+
+            <!-- Developer Drawer for Cookies -->
+            <div class="collapsible-container">
+                <button type="button" class="collapsible-trigger" id="devTrigger" onclick="toggleDevConsole()">
+                    <i class="fa-solid fa-chevron-down"></i> Technical Details / Session Cookies
+                </button>
+                <div class="collapsible-content" id="devConsole">
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+                        Save these cookies to reuse them in the bypass tab next time or configure your app request.
+                    </p>
+                    <div class="cookie-box">
+                        <button class="copy-btn" onclick="copyCookies()"><i class="fa-regular fa-copy"></i> Copy</button>
+                        <code id="cookieCode">{}</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentTab = 'standard';
+        let fetchedCookies = null;
+
+        function switchTab(tab) {
+            currentTab = tab;
+            const tabStd = document.getElementById('tabStandard');
+            const tabCki = document.getElementById('tabCookie');
+            const pwdGroup = document.getElementById('pwdGroup');
+            const cookieGroup = document.getElementById('cookieGroup');
+            const passwordInput = document.getElementById('password');
+
+            if (tab === 'standard') {
+                tabStd.classList.add('active');
+                tabCki.classList.remove('active');
+                pwdGroup.style.display = 'flex';
+                cookieGroup.style.display = 'none';
+                passwordInput.setAttribute('required', 'true');
+            } else {
+                tabStd.classList.remove('active');
+                tabCki.classList.add('active');
+                pwdGroup.style.display = 'none';
+                cookieGroup.style.display = 'flex';
+                passwordInput.removeAttribute('required');
+            }
+        }
+
+        // Initialize password field as required by default
+        document.getElementById('password').setAttribute('required', 'true');
+
+        function toggleDateRange() {
+            const dateInputs = document.getElementById('dateInputsContainer');
+            const checkbox = document.getElementById('customDateToggle');
+            if (checkbox.checked) {
+                dateInputs.classList.add('visible');
+            } else {
+                dateInputs.classList.remove('visible');
+            }
+        }
+
+        function toggleDevConsole() {
+            const devConsole = document.getElementById('devConsole');
+            const trigger = document.getElementById('devTrigger');
+            devConsole.classList.toggle('open');
+            trigger.classList.toggle('active');
+        }
+
+        function copyCookies() {
+            const code = document.getElementById('cookieCode').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                btn.style.background = 'rgba(16, 185, 129, 0.2)';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+                    btn.style.background = 'rgba(255, 255, 255, 0.08)';
+                }, 2000);
+            });
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            
+            const errorPanel = document.getElementById('errorPanel');
+            const resultsPanel = document.getElementById('resultsPanel');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loaderText = document.getElementById('loaderText');
+            
+            errorPanel.classList.remove('visible');
+            loadingOverlay.classList.add('active');
+            
+            const college = document.getElementById('college').value;
+            const rollNumber = document.getElementById('rollNumber').value.trim();
+            const password = document.getElementById('password').value;
+            const customDate = document.getElementById('customDateToggle').checked;
+            const fromDate = customDate ? document.getElementById('fromDate').value : "";
+            const toDate = customDate ? document.getElementById('toDate').value : "";
+
+            let cookiesObj = null;
+            if (currentTab === 'cookie') {
+                const cookieRaw = document.getElementById('cookies').value.trim();
+                if (!cookieRaw) {
+                    showError("Please enter session cookies in JSON format.");
+                    return;
+                }
+                try {
+                    cookiesObj = JSON.parse(cookieRaw);
+                } catch(e) {
+                    showError("Invalid JSON cookies. Ensure they follow the key-value format: {\"ASP.NET_SessionId\": \"xxx\", \"frmAuth\": \"yyy\"}");
+                    return;
+                }
+            }
+
+            // Build request payload
+            const payload = {
+                roll_number: rollNumber,
+                college: college,
+                mode: customDate ? "period" : "tillNow"
+            };
+
+            if (currentTab === 'standard') {
+                payload.password = password;
+                loaderText.innerText = "Simulating portal login (Playwright)...";
+            } else {
+                payload.cookies = cookiesObj;
+                loaderText.innerText = "Requesting direct scraping via cookies...";
+            }
+
+            if (customDate && fromDate && toDate) {
+                payload.from_date = fromDate;
+                payload.to_date = toDate;
+            }
+
+            try {
+                const response = await fetch('/api/attendance', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.detail || "Failed to fetch attendance.");
+                }
+
+                // Render Results
+                renderResults(result, rollNumber, college);
+                resultsPanel.classList.add('visible');
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (err) {
+                showError(err.message || "An unexpected error occurred.");
+            } finally {
+                loadingOverlay.classList.remove('active');
+            }
+        }
+
+        function showError(msg) {
+            const errorPanel = document.getElementById('errorPanel');
+            const errorMsg = document.getElementById('errorMsg');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            errorMsg.innerText = msg;
+            errorPanel.classList.add('visible');
+            loadingOverlay.classList.remove('active');
+        }
+
+        function calculateBunk(held, attended) {
+            if (held === 0) return { status: 'neutral', text: 'No classes held' };
+            const pct = (attended / held) * 100;
+            
+            if (pct >= 75.0) {
+                // Max classes safe to bunk
+                // A / (H + x) >= 0.75 => A >= 0.75H + 0.75x => 0.75x <= A - 0.75H => x <= (A - 0.75H) / 0.75
+                const safe = Math.floor((4 * attended - 3 * held) / 3);
+                if (safe > 0) {
+                    return {
+                        status: 'safe',
+                        text: `Safe to bunk next ${safe} class${safe > 1 ? 'es' : ''}`
+                    };
+                } else {
+                    return {
+                        status: 'neutral',
+                        text: 'Perfect 75%. Bunking will drop your attendance.'
+                    };
+                }
+            } else {
+                // Required consecutive classes to attend
+                // (A + y) / (H + y) >= 0.75 => A + y >= 0.75H + 0.75y => 0.25y >= 0.75H - A => y >= 3H - 4A
+                const required = (3 * held) - (4 * attended);
+                return {
+                    status: 'required',
+                    text: `Must attend next ${required} class${required > 1 ? 'es' : ''} consecutively`
+                };
+            }
+        }
+
+        function renderResults(result, rollNumber, college) {
+            const data = result.data;
+            fetchedCookies = result.cookies;
+
+            // Student Avatar and Details
+            const stdName = data.studentName || "Student";
+            document.getElementById('studentName').innerText = stdName;
+            document.getElementById('avatarLetter').innerText = stdName.charAt(0).toUpperCase();
+            document.getElementById('displayRoll').innerText = rollNumber.toUpperCase();
+            
+            // Badges
+            document.getElementById('collegeBadge').innerText = college.toUpperCase();
+            document.getElementById('methodBadge').innerText = result.method.toUpperCase() === 'COOKIES' ? 'Cookie Bypass' : 'Direct Login';
+            
+            // Overall Percentage and SVG circle progress
+            const pct = data.overallPercentage || 0;
+            document.getElementById('overallPctText').innerText = `${pct}%`;
+            
+            const circle = document.getElementById('circleProgress');
+            const radius = 54;
+            const circumference = 2 * Math.PI * radius; // ~339.292
+            const offset = circumference - (pct / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            // Overall Classes stat
+            const held = data.totalClasses || 0;
+            const attended = data.totalAttended || 0;
+            document.getElementById('statsClasses').innerText = `${attended} / ${held}`;
+
+            // Consolidated Bunk Health
+            const consolidatedBunk = calculateBunk(held, attended);
+            const bunkSummaryEl = document.getElementById('bunkSummary');
+            bunkSummaryEl.innerText = consolidatedBunk.text;
+            bunkSummaryEl.className = 'stat-val';
+            
+            if (consolidatedBunk.status === 'safe') {
+                bunkSummaryEl.style.background = 'var(--success-gradient)';
+            } else if (consolidatedBunk.status === 'required') {
+                bunkSummaryEl.style.background = 'var(--danger-gradient)';
+            } else {
+                bunkSummaryEl.style.background = 'var(--warning-gradient)';
+            }
+            bunkSummaryEl.style.webkitBackgroundClip = 'text';
+            bunkSummaryEl.style.webkitTextFillColor = 'transparent';
+
+            // Populate subjects
+            const grid = document.getElementById('subjectGrid');
+            grid.innerHTML = '';
+
+            const subjects = data.subjects || [];
+            if (subjects.length === 0) {
+                grid.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 2rem;">No subject-specific attendance details found.</div>';
+                return;
+            }
+
+            subjects.forEach(sub => {
+                const subPct = sub.percentage;
+                const subHeld = sub.totalClasses;
+                const subAttended = sub.attendedClasses;
+                
+                // Color status for progress bar
+                let statusClass = 'status-ok';
+                if (subPct < 75 && subPct >= 65) {
+                    statusClass = 'status-warning';
+                } else if (subPct < 65) {
+                    statusClass = 'status-danger';
+                }
+
+                const subBunk = calculateBunk(subHeld, subAttended);
+                let bunkTagClass = 'neutral';
+                if (subBunk.status === 'safe') bunkTagClass = 'safe';
+                if (subBunk.status === 'required') bunkTagClass = 'required';
+
+                const cardHtml = `
+                    <div class="subject-card">
+                        <div class="subject-header">
+                            <div class="subject-title">${sub.subject}</div>
+                            <div class="subject-pct" style="color: ${subPct >= 75 ? 'var(--success)' : (subPct >= 65 ? 'var(--warning)' : 'var(--danger)')}">${subPct}%</div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill ${statusClass}" style="width: ${subPct}%"></div>
+                        </div>
+                        <div class="subject-footer">
+                            <span>Attended: <b>${subAttended}/${subHeld}</b> classes</span>
+                            <span class="bunk-calculator ${bunkTagClass}">${subBunk.text}</span>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHtml;
+            });
+
+            // Populate Dev Console
+            document.getElementById('cookieCode').innerText = JSON.stringify(fetchedCookies, null, 2);
+        }
+    </script>
+</body>
+</html>
