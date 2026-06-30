@@ -333,7 +333,16 @@ async def scrape_with_browser_login(
         # Launch browser headfully (requires xvfb-run on headless servers)
         browser = await p.chromium.launch(
             headless=False,
-            args=["--no-sandbox", "--disable-setuid-sandbox"]
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-accelerated-2d-canvas",
+                "--disable-gpu",
+                "--no-first-run",
+                "--no-zygote",
+                "--single-process",
+            ]
         )
         
         context = await browser.new_context(
